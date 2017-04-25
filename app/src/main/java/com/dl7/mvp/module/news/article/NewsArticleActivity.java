@@ -51,7 +51,7 @@ public class NewsArticleActivity extends BaseSwipeBackActivity<IBasePresenter> i
     TextView mTvTime;
     @BindView(R.id.tv_title)
     TextView mTvTitle;
-    @BindView(R.id.ll_pre_toolbar)
+    @BindView(R.id.ll_pre_toolbar)//进入详情页首先出现的titlebar
     LinearLayout mLlPreToolbar;
     @BindView(R.id.tv_content)
     TextView mTvContent;
@@ -68,7 +68,7 @@ public class NewsArticleActivity extends BaseSwipeBackActivity<IBasePresenter> i
     @BindView(R.id.tv_title_2)
     TextView mTvTitle2;
     @BindView(R.id.ll_top_bar)
-    LinearLayout mLlTopBar;
+    LinearLayout mLlTopBar;//下拉时出现的titlebar
 
     private int mToolbarHeight;
     private int mTopBarHeight;

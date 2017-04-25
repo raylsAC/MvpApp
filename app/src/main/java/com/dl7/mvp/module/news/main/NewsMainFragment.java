@@ -60,9 +60,11 @@ public class NewsMainFragment extends BaseFragment<IRxBusPresenter> implements I
     @Override
     protected void initViews() {
         initToolBar(mToolBar, true, "新闻");
-        setHasOptionsMenu(true);
+        setHasOptionsMenu(true);//fragment中要onOptionsItemSelected有效必须加这句代码
+
         mViewPager.setAdapter(mPagerAdapter);
         mTabLayout.setupWithViewPager(mViewPager);
+
         mPresenter.registerRxBus(ChannelEvent.class, new Action1<ChannelEvent>() {
             @Override
             public void call(ChannelEvent channelEvent) {
@@ -95,14 +97,14 @@ public class NewsMainFragment extends BaseFragment<IRxBusPresenter> implements I
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_channel, menu);
+        inflater.inflate(R.menu.menu_channel, menu);//加载toolbar的菜单
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.item_channel) {
             ChannelActivity.launch(mContext);
-            return true;
+            return true;//toolbar点击监听
         }
         return false;
     }
@@ -122,7 +124,7 @@ public class NewsMainFragment extends BaseFragment<IRxBusPresenter> implements I
                 mPagerAdapter.delItem(channelEvent.newsInfo.getName());
                 break;
             case ChannelEvent.SWAP_EVENT:
-                mPagerAdapter.swapItems(channelEvent.fromPos, channelEvent.toPos);
+                mPagerAdapter.swapItems(channelEvent.fromPos, channelEvent.toPos);//交换列表的排列顺序
                 break;
         }
     }

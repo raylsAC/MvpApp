@@ -30,12 +30,12 @@ public class NewsMainPresenter implements IRxBusPresenter {
 
     @Override
     public void getData(boolean isRefresh) {
-        mDbDao.queryBuilder().rx().list()
+        mDbDao.queryBuilder().rx().list()//从数据库拿新闻分类，并返回一个被观察者
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<List<NewsTypeInfo>>() {
                     @Override
                     public void call(List<NewsTypeInfo> newsTypeBeen) {
-                        mView.loadData(newsTypeBeen);
+                        mView.loadData(newsTypeBeen);//使用rxjava调度，拿到数据后执行对应页面的loaddata
                     }
                 });
     }

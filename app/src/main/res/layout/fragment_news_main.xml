@@ -28,15 +28,17 @@
             android:layout_height="wrap_content"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
+            <!--如果这里没有更改图标，那么效果则是默认的左箭头-->
             <android.support.v7.widget.Toolbar
                 android:id="@+id/tool_bar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:background="?attr/colorPrimary"
                 app:navigationIcon="@mipmap/ic_nav"
-                app:layout_scrollFlags="scroll|enterAlways|snap"
+                app:layout_scrollFlags="scroll|enterAlwaysCollapsed|snap"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
 
+            <!--tabMode="scrollable"表示可滑动，fixed则是固定-->
             <android.support.design.widget.TabLayout
                 android:id="@+id/tab_layout"
                 android:layout_width="match_parent"

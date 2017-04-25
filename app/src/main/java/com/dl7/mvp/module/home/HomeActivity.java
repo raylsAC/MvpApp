@@ -85,12 +85,67 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         mSparseTags.put(R.id.nav_news, "News");
         mSparseTags.put(R.id.nav_photos, "Photos");
         mSparseTags.put(R.id.nav_videos, "Videos");
-        _getPermission();
+        _getPermission();//处理sd卡读写权限
+
+        SnackbarUtils.showSnackbar(HomeActivity.this, "下载目录创建失败", true);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            mDrawerLayout.openDrawer(GravityCompat.START);//
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * 初始化 DrawerLayout
+     *
+     * @param drawerLayout DrawerLayout
+     * @param navView      NavigationView
+     */
+    private void _initDrawerLayout(DrawerLayout drawerLayout, NavigationView navView) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            WindowManager.LayoutParams localLayoutParams = getWindow().getAttributes();
+            localLayoutParams.flags = (WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS | localLayoutParams.flags);
+            //将侧边栏顶部延伸至status bar
+            drawerLayout.setFitsSystemWindows(true);
+            //将主页面顶部延伸至status bar
+            drawerLayout.setClipToPadding(false);
+        }
+
+        drawerLayout.addDrawerListener(new DrawerLayout.SimpleDrawerListener() {
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                mHandler.sendEmptyMessage(mItemId);
+            }
+        });
+
+        navView.setNavigationItemSelectedListener(this);
+    }
+
+    private void _getPermission() {
+        final File dir = new File(FileDownloader.getDownloadDir());//获取下载目录
+        if (!dir.exists() || !dir.isDirectory()) {
+            dir.delete();
+            new RxPermissions(this).request(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE)//sd卡读写权限申请
+                    .subscribe(new Action1<Boolean>() {
+                        @Override
+                        public void call(Boolean granted) {
+                            if (granted) {//全部权限申请通过
+                                dir.mkdirs();
+                            } else {//至少一个权限申请没有通过
+                                SnackbarUtils.showSnackbar(HomeActivity.this, "下载目录创建失败", true);//功能类似toast
+                            }
+                        }
+                    });
+        }
     }
 
     @Override
     protected void updateViews(boolean isRefresh) {
-        mNavView.setCheckedItem(R.id.nav_news);
+        mNavView.setCheckedItem(R.id.nav_news);//默认设置新闻是选中的
         addFragment(R.id.fl_container, new NewsMainFragment(), "News");
     }
 
@@ -120,58 +175,6 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
             super.onBackPressed();
         }
     }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            mDrawerLayout.openDrawer(GravityCompat.START);
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    /**
-     * 初始化 DrawerLayout
-     *
-     * @param drawerLayout DrawerLayout
-     * @param navView      NavigationView
-     */
-    private void _initDrawerLayout(DrawerLayout drawerLayout, NavigationView navView) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            WindowManager.LayoutParams localLayoutParams = getWindow().getAttributes();
-            localLayoutParams.flags = (WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS | localLayoutParams.flags);
-            //将侧边栏顶部延伸至status bar
-            drawerLayout.setFitsSystemWindows(true);
-            //将主页面顶部延伸至status bar
-            drawerLayout.setClipToPadding(false);
-        }
-        drawerLayout.addDrawerListener(new DrawerLayout.SimpleDrawerListener() {
-            @Override
-            public void onDrawerClosed(View drawerView) {
-                mHandler.sendEmptyMessage(mItemId);
-            }
-        });
-        navView.setNavigationItemSelectedListener(this);
-    }
-
-    private void _getPermission() {
-        final File dir = new File(FileDownloader.getDownloadDir());
-        if (!dir.exists() || !dir.isDirectory()) {
-            dir.delete();
-            new RxPermissions(this).request(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE)
-                    .subscribe(new Action1<Boolean>() {
-                        @Override
-                        public void call(Boolean granted) {
-                            if (granted) {
-                                dir.mkdirs();
-                            } else {
-                                SnackbarUtils.showSnackbar(HomeActivity.this, "下载目录创建失败", true);
-                            }
-                        }
-                    });
-        }
-    }
-
 
     /**
      * 退出

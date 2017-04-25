@@ -98,7 +98,7 @@ public class NewsListFragment extends BaseFragment<IBasePresenter> implements IN
         mAdapter.setRequestDataListener(new OnRequestDataListener() {
             @Override
             public void onLoadMore() {
-                mPresenter.getMoreData();
+                mPresenter.getMoreData();//加载更多
             }
         });
     }

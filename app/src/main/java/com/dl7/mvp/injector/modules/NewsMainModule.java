@@ -27,7 +27,7 @@ public class NewsMainModule {
     @PerFragment
     @Provides
     public IRxBusPresenter provideMainPresenter(DaoSession daoSession, RxBus rxBus) {
-        return new NewsMainPresenter(mView, daoSession.getNewsTypeInfoDao(), rxBus);
+        return new NewsMainPresenter(mView, daoSession.getNewsTypeInfoDao(), rxBus);//这里的daoSession和rxbus均来自androidapplication
     }
 
     @PerFragment

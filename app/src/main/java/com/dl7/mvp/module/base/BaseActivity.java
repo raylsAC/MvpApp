@@ -142,15 +142,6 @@ public abstract class BaseActivity<T extends IBasePresenter> extends RxAppCompat
     }
 
     /**
-     * 获取 ActivityModule
-     *
-     * @return ActivityModule
-     */
-    protected ActivityModule getActivityModule() {
-        return new ActivityModule(this);
-    }
-
-    /**
      * 初始化 Toolbar
      *
      * @param toolbar
@@ -173,37 +164,11 @@ public abstract class BaseActivity<T extends IBasePresenter> extends RxAppCompat
      * @param containerViewId
      * @param fragment
      */
-    protected void addFragment(int containerViewId, Fragment fragment) {
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.add(containerViewId, fragment);
-        fragmentTransaction.commit();
-    }
-
-    /**
-     * 添加 Fragment
-     *
-     * @param containerViewId
-     * @param fragment
-     */
     protected void addFragment(int containerViewId, Fragment fragment, String tag) {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         // 设置tag，不然下面 findFragmentByTag(tag)找不到
         fragmentTransaction.add(containerViewId, fragment, tag);
         fragmentTransaction.addToBackStack(tag);
-        fragmentTransaction.commit();
-    }
-
-    /**
-     * 替换 Fragment
-     *
-     * @param containerViewId
-     * @param fragment
-     */
-    protected void replaceFragment(int containerViewId, Fragment fragment) {
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(containerViewId, fragment);
-        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-        fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
 

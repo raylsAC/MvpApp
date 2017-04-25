@@ -32,7 +32,7 @@ public class NewsTypeDao {
         sAllChannels = GsonHelper.convertEntities(AssetsHelper.readData(context, "NewsChannel"), NewsTypeInfo.class);
         NewsTypeInfoDao beanDao = daoSession.getNewsTypeInfoDao();
         if (beanDao.count() == 0) {
-            beanDao.insertInTx(sAllChannels.subList(0, 3));
+            beanDao.insertInTx(sAllChannels.subList(0, 3));//如果表中没有数据，截取集合中前面三条数据并插入表中
         }
     }
 

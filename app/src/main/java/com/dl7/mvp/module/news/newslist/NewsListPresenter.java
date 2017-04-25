@@ -52,7 +52,7 @@ public class NewsListPresenter implements IBasePresenter {
                         return !NewsUtils.isAbNews(newsBean);
                     }
                 })
-                .compose(mTransformer)
+                .compose(mTransformer)//统一变换
                 .subscribe(new Subscriber<List<NewsMultiItem>>() {
                     @Override
                     public void onCompleted() {
